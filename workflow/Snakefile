@@ -1,0 +1,29 @@
+"""
+WGDdetector
+
+a pipeline for whole genome duplication (WGD) detecting with the genome or transcriptome annotations
+
+ref. Yang et al 2019 https://doi.org/10.1186/s12859-019-2670-3
+"""
+
+from pathlib import Path
+
+
+configfile: "config/config.yaml"
+
+
+outdir = Path(config["outdir"])
+logdir = Path(config["logdir"])
+
+proteome_fasta = config["input"]["proteome_pep_fasta"]
+run_name = os.path.basename(proteome_fasta)
+blastp_csv = outdir / os.path.join(run_name, ".blastp.out")
+blast_db_path = outdir / "blast" / "db" / run_name
+
+
+include: "rules/protein_blastp_cluster.smk"
+
+
+rule all:
+    input:
+        blastp_csv,

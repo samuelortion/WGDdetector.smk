@@ -1,0 +1,7 @@
+name: wgddetector
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - bioconda::snakemake

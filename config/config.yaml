@@ -1,0 +1,7 @@
+outdir: results
+logdir: log
+threads: 8
+
+input:
+  proteome_cds_fasta: "/home/sortion/Documents/course/master/M1/internship/lamme2024/project/others/WGDdetector/example/test.cds.fa" # FIXME: use a test dataset available from github
+  proteome_pep_fasta: "/home/sortion/Documents/course/master/M1/internship/lamme2024/project/others/WGDdetector/example/test.pep.fa"
