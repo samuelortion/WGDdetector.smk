@@ -16,9 +16,9 @@ rule blast_blastp_all:
                 ".pto",
             ],
         ),
-        query=proteome_fasta,
+        query=proteome_pep,
     output:
-        csv=blastp_csv,
+        csv=blasto_tsv,
     params:
         db=blast_db_path,
         seg="yes",
@@ -38,7 +38,7 @@ rule blast_blastp_all:
 
 rule blast_makeblastdb_protein:
     input:
-        fasta=proteome_fasta,
+        fasta=proteome_pep,
     output:
         multiext(
             str(blast_db_path),

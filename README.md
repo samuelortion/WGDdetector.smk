@@ -22,6 +22,14 @@ Example command line:
 snakemake --cores 1 --snakefile ./workflow/Snakefile --use-conda
 ```
 
+A small wrapper on the snakemake CLI is provided in `cli.py`, to offer a similar interface and option as the original WGDdetector, with the drawbacks of being less versatile.
+Example of cli adapted from `wgddetector/example/00.run.sh`: 
+```bash
+python3 cli.py --input_cds test.cds.fa --input_pep test.pep.fa --output_dir output --tmp_dir tmp --thread_num 4 --cluster_engine mmseqs2
+```
+
+We rather recommend to use the `snakemake` CLI.
+
 ## References
 
 > Yang Y, Li Y, Chen Q, Sun Y, Lu Z: WGDdetector: a pipeline for detecting whole genome duplication events using the genome or transcriptome annotations. BMC Bioinformatics 2019, 20(1):75.

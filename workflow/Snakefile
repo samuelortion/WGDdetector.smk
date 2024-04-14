@@ -15,9 +15,11 @@ configfile: "config/config.yaml"
 outdir = Path(config["outdir"])
 logdir = Path(config["logdir"])
 
-proteome_fasta = config["input"]["proteome_pep_fasta"]
-run_name = os.path.basename(proteome_fasta)
-blastp_csv = outdir / os.path.join(run_name, ".blastp.out")
+proteome_pep = config["input_pep"]
+proteome_cds = config["input_cds"]
+
+run_name = os.path.basename(proteome_pep)
+blasto_tsv = outdir / os.path.join(run_name, ".blastp.out")
 blast_db_path = outdir / "blast" / "db" / run_name
 
 
@@ -26,4 +28,4 @@ include: "rules/protein_blastp_cluster.smk"
 
 rule all:
     input:
-        blastp_csv,
+        blasto_tsv,
