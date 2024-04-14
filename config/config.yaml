@@ -1,6 +1,6 @@
 outdir: results
 logdir: log
-threads: 8
+threads: 1
 
 input_cds: "/home/sortion/Documents/course/master/M1/internship/lamme2024/project/others/WGDdetector/example/test.cds.fa" # FIXME: use a test dataset available from github
 input_pep: "/home/sortion/Documents/course/master/M1/internship/lamme2024/project/others/WGDdetector/example/test.pep.fa"

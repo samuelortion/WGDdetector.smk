@@ -1,7 +1,8 @@
-name: wgddetector-smk
+name: bioperl
 channels:
   - bioconda
   - conda-forge
   - defaults
 dependencies:
-  - bioconda::snakemake
+  - perl
+  - bioconda::perl-bioperl

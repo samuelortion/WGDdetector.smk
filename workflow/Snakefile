@@ -19,13 +19,24 @@ proteome_pep = config["input_pep"]
 proteome_cds = config["input_cds"]
 
 run_name = os.path.basename(proteome_pep)
-blasto_tsv = outdir / os.path.join(run_name, ".blastp.out")
+blastp_tsv = outdir / f"{run_name}.blastp.tsv"
 blast_db_path = outdir / "blast" / "db" / run_name
+mcl_input_prefix = outdir / "mcl" / f"{run_name}.mcl-input"
+mcl_abc = f"{mcl_input_prefix}_nrm_dmls_bit.abc"
+
+filtered_pep_fasta = outdir / f"{run_name}.pep_filt.fa"
+filtered_cds_fasta = outdir / f"{run_name}.cds.filt.fa"
+genenum_seqid_mapping_table = outdir / f"{run_name}.id.table"
 
 
+include: "rules/phase_id.smk"
 include: "rules/protein_blastp_cluster.smk"
 
 
 rule all:
     input:
-        blasto_tsv,
+        filtered_pep_fasta,
+        filtered_cds_fasta,
+        genenum_seqid_mapping_table,
+        blastp_tsv,
+        mcl_abc,

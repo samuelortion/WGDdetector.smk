@@ -1,0 +1,5 @@
+name: blast2graphs
+channels:
+  - defaults
+dependencies:
+  - networkx=2.0

@@ -16,12 +16,12 @@ rule blast_blastp_all:
                 ".pto",
             ],
         ),
-        query=proteome_pep,
+        query=filtered_pep_fasta,
     output:
-        csv=blasto_tsv,
+        csv=blastp_tsv,
     params:
         db=blast_db_path,
-        seg="yes",
+        seg="no",
         evalue="1e10",  # FIXME: hard-coded in original WGDdetector protein_blastp_cluster.pl
         format="7 std qlen slen",  # we need to keep both lengths
         num_threads=config["threads"],
@@ -38,7 +38,7 @@ rule blast_blastp_all:
 
 rule blast_makeblastdb_protein:
     input:
-        fasta=proteome_pep,
+        fasta=filtered_pep_fasta,
     output:
         multiext(
             str(blast_db_path),
@@ -63,4 +63,25 @@ rule blast_makeblastdb_protein:
     shell:
         """
         makeblastdb -in "{input.fasta}" -parse_seqids -dbtype prot -out "{params.db}" || exit 0  > "{log.stdout}" 2> "{log.stderr}" # makeblastdb returns ERROR even if it ran successfully on some (recent?) versions: exit 0 to avoid stopping the pipeline
+        """
+
+
+print(mcl_abc)
+
+
+rule blast2graph:
+    input:
+        blastp_tsv=blastp_tsv,
+    params:
+        prefix=mcl_input_prefix,
+    output:
+        mcl_abc=mcl_abc,
+    conda:
+        "../envs/blast2graph.yaml"
+    log:
+        stderr=logdir / "blast2graph.stderr",
+        stdout=logdir / "blast2graph.stdout",
+    shell:
+        """
+        python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{params.prefix}"  > "{log.stdout}" 2> "{log.stderr}"
         """
