@@ -8,6 +8,12 @@ WGDDetector is a pipeline for whole genome duplication (WGD) detection with geno
 
 ## Install
 
+Clone this repository (use `--recurse-submodules`)
+```bash
+git clone --recurse-submodules https://github.com/samuelortion/WGDdetector.smk.git
+cd WGDdetector
+```
+
 ### Dependencies
 
 - Snakemake
