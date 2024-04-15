@@ -5,12 +5,12 @@ Filter blast output
 """
 
 
-rule filter_blast_hsp_evalue:
+rule filter_evalue_blast_hsp:
     """Filter out blast HSPs above a given value"""
     input:
-        blast_tsv_raw=blast_tsv_raw,
+        "{name}.blast",
     output:
-        blast_tsv_filtered=blast_tsv_filtered,
+        "{name}_fevalue.blast",
     params:
         threshold="1e-10",  # FIXME: handle this hard-coded value properly
     # conda: # TODO: Should I add a awk dependencies yaml file?
@@ -19,5 +19,5 @@ rule filter_blast_hsp_evalue:
         # stdout=logdir / "filter_blast_hsp_evalue.stdout", # stdout is already used to redirect awk output
     shell:
         """
-        awk -f "workflow/scripts/filter_blast_hsp_evalue.awk" -v threshold="{params.threshold}" "{input.blast_tsv_raw}" > "{output.blast_tsv_filtered}" 2> "{log.stderr}"
+        awk -f "workflow/scripts/filter_blast_hsp_evalue.awk" -v threshold="{params.threshold}" "{input}" > "{output}" 2> "{log.stderr}"
         """

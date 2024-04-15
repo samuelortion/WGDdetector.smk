@@ -2,3 +2,4 @@ results
 log
 tmp
 .snakemake
+.pytest_cache

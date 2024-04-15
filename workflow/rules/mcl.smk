@@ -2,34 +2,38 @@
 Run Markov Clustering (MCL) on an ABC file representing an homology links graph between genes
 """
 
+import os
+
 
 rule mcl_genes_abc:
     input:
-        abc_file=abc_file,
+        "{name}.abc",
     output:
-        mcl_file=mcl_file,
+        "{name}.mcl",
     conda:
         "../envs/mcl.yaml"
     log:
-        stderr=logdir / "mcl_genes_abcs.stderr",
-        stdout=logdir / "mcl_genes_abc.stdout",
+        # stdout=lambda wildcards: logdir / "mcl_genes_abc" / f"{os.path.basename(wildcards.name)}.stdout",
+        # stderr=lambda wildcards: logdir / "mcl_genes_abc" / f"{os.path.basename(wildcards.name)}.stderr"
+        stdout=logdir / "mcl_genes_abc" / "{name}.stdout",
+        stderr=logdir / "mcl_genes_abc" / "{name}.stderr",
     shell:
         """
-        mcl "{input.abc_file}" --abc -I 1.5 -o "{output.mcl_file}" > "{log.stdout}" 2> "{log.stderr}"
+        mcl "{input}" --abc -I 1.5 -o "{output}" > "{log.stdout}" 2> "{log.stderr}"
         """
 
 
 rule mcl_output_to_orthomcl:
     input:
-        mcl_file=mcl_file,
+        "{name}.mcl",
     output:
-        orthomcl_file=orthomcl_file,
+        "{name}.orthomcl",
     conda:
         "../envs/bioperl.yaml"
     log:
-        stderr=logdir / "mcl_output_to_orthomcl.stderr",
-        stdout=logdir / "mcl_output_to_orthomcl.stdout",
+        stderr=logdir / "mcl_output_to_orthomcl" / "{name}.stderr",
+        stdout=logdir / "mcl_output_to_orthomcl" / "{name}.stdout",
     shell:
         """
-        perl "workflow/scripts/phase.mcloutp2orthomcl.format.pl" "{input.mcl_file}" "{output.orthomcl_file}" > "{log.stdout}" 2> "{log.stderr}"
+        perl "workflow/scripts/phase.mcloutp2orthomcl.format.pl" "{input}" "{output}" > "{log.stdout}" 2> "{log.stderr}"
         """

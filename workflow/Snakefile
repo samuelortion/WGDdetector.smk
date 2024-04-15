@@ -16,26 +16,34 @@ outdir = Path(config["outdir"])
 logdir = Path(config["logdir"])
 tmpdir = Path(config["tmpdir"])
 
-proteome_pep = config["input_pep"]
-proteome_cds = config["input_cds"]
+input_pep = config["input_pep"]
+input_cds = config["input_cds"]
 
-run_name = os.path.basename(proteome_pep)
-blastp_tsv = outdir / f"{run_name}.blastp.tsv"
-blast_db_path = outdir / "blast" / "db" / run_name
+run_name = config["name"]
+print(run_name)
+
+print(outdir / "blastp" / "db" / "test.pep.filt.fa")
+
 mcl_input_prefix = outdir / "mcl" / f"{run_name}.mcl-input"
-abc_file = f"{mcl_input_prefix}_nrm_dmls_bit.abc"
 
-filtered_pep_fasta = outdir / f"{run_name}.pep_filt.fa"
+filtered_pep_fasta = outdir / f"{run_name}.pep.filt.fa"
 filtered_cds_fasta = outdir / f"{run_name}.cds.filt.fa"
 genenum_seqid_mapping_table = outdir / f"{run_name}.id.table"
 
-mcl_file = outdir / "mcl" / f"{run_name}.mcl"
-orthomcl_file = outdir / "mcl" / f"{run_name}.orthomcl"  # all-protein-clustering.result
+orthomcl_file = (
+    outdir / "mcl" / f"{run_name}.pep.filt.orthomcl"
+)  # all-protein-clustering.result
 # FIXME: It may be better to use the same naming convention as Yang et al., to not confuse the eventual user.
 
-mmseqs2_db_path = outdir / "mmseqs2" / "db" / f"{run_name}"
-mmseqs2_out_db_path = outdir / "mmseqs2" / "out" / f"{run_name}"
+mmseqs2_input_fasta = filtered_pep_fasta
+mmseqs2_out_db_path = outdir / "mmseqs2" / f"{run_name}"
 mmseqs2_blast_tsv = outdir / "mmseqs2" / f"{run_name}.blastp.tsv"
+
+
+blastp_input_fasta = filtered_pep_fasta
+print(blastp_input_fasta)
+blastp_tsv = outdir / "blastp" / f"{run_name}.pep.filt.fa.blastp.tsv"
+blast_db_path = outdir / "blastp" / "db" / run_name
 
 
 include: "rules/phase_id.smk"
@@ -47,10 +55,24 @@ include: "rules/mcl.smk"
 rule all:
     input:
         filtered_pep_fasta,
-        filtered_cds_fasta,
-        genenum_seqid_mapping_table,
         blastp_tsv,
-        abc_file,
-        mcl_file,
-        orthomcl_file,
-        mmseqs2_blast_tsv,
+        # outdir / f"{run_name}_nrm_dmls_bit.abc"
+        # orthomcl_file,
+        # filtered_pep_fasta,
+        # filtered_cds_fasta,
+        # genenum_seqid_mapping_table,
+        # abc_file,
+        # mcl_file,
+        # orthomcl_file,
+        # mmseqs2_blast_tsv,
+
+
+rule init:
+    input:
+        input_pep,
+    output:
+        outdir / f"{run_name}",
+    shell:
+        """
+        cp "{input}" "{output}"
+        """

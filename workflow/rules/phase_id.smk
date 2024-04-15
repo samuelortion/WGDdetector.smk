@@ -7,12 +7,12 @@ Filter the CDS FASTA file to keep only sequences that appear in the protein FAST
 
 rule filter_cds_pep_seqids:
     input:
-        cds_fasta=proteome_cds,
-        pep_fasta=proteome_pep,
+        cds_fasta=input_cds,
+        pep_fasta=input_pep,
     output:
-        out_cds_fasta=filtered_pep_fasta,
-        out_pep_fasta=filtered_cds_fasta,
-        out_id_table=genenum_seqid_mapping_table,
+        cds_fasta=filtered_pep_fasta,
+        pep_fasta=filtered_cds_fasta,
+        id_table=genenum_seqid_mapping_table,
     conda:
         "../envs/bioperl.yaml"
     log:
@@ -20,5 +20,5 @@ rule filter_cds_pep_seqids:
         stdout=logdir / "filter_cds_pep_seqids.stdout",
     shell:
         """
-        perl "workflow/scripts/phase.id.pl" "{input.cds_fasta}" "{input.pep_fasta}" "{output.out_cds_fasta}" "{output.out_pep_fasta}" "{output.out_id_table}" > "{log.stdout}" 2> "{log.stderr}"
+        perl "workflow/scripts/phase.id.pl" "{input.cds_fasta}" "{input.pep_fasta}" "{output.cds_fasta}" "{output.pep_fasta}" "{output.id_table}" > "{log.stdout}" 2> "{log.stderr}"
         """

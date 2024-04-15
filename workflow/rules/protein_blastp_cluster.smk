@@ -1,24 +1,24 @@
+blast_db_path = outdir / "blastp" / "db" / f"{run_name}.pep.filt.fa"
+
+
 rule blast_blastp_all:
     input:
-        expand(
-            "{db}{ext}",
-            db=blast_db_path,
-            ext=[
-                ".pdb",
-                ".phr",
-                ".pin",
-                ".pjs",
-                ".pog",
-                ".pos",
-                ".pot",
-                ".psq",
-                ".ptf",
-                ".pto",
-            ],
+        multiext(
+            str(blast_db_path),
+            ".pdb",
+            ".phr",
+            ".pin",
+            ".pjs",
+            ".pog",
+            ".pos",
+            ".pot",
+            ".psq",
+            ".ptf",
+            ".pto",
         ),
-        query=filtered_pep_fasta,
+        query=outdir / "{name}",
     output:
-        csv=blastp_tsv,
+        tsv=outdir / "blastp/{name}.blastp.tsv",
     params:
         db=blast_db_path,
         seg="no",
@@ -28,17 +28,17 @@ rule blast_blastp_all:
     conda:
         "../envs/blast.yaml"
     log:
-        stderr=logdir / "blast_blastp_all.stderr",
-        stdout=logdir / "blast_blastp_all.stdout",
+        stderr=logdir / "blast_blastp_all" / "{name}.stdout",
+        stdout=logdir / "blast_blastp_all" / "{name}.stderr",
     shell:
         """
-        blastp -query "{input.query}" -db "{params.db}" -seg "{params.seg}" -evalue "{params.evalue}" -out "{output.csv}" -outfmt "{params.format}" -num_threads "{params.num_threads}"  > "{log.stdout}" 2> "{log.stderr}"
+        blastp -query "{input.query}" -db "{params.db}" -seg "{params.seg}" -evalue "{params.evalue}" -out "{output.tsv}" -outfmt "{params.format}" -num_threads "{params.num_threads}"  > "{log.stdout}" 2> "{log.stderr}"
         """
 
 
 rule blast_makeblastdb_protein:
     input:
-        fasta=filtered_pep_fasta,
+        fasta=blastp_input_fasta,
     output:
         multiext(
             str(blast_db_path),
@@ -66,19 +66,17 @@ rule blast_makeblastdb_protein:
         """
 
 
-rule blast2graph:
+rule blast2graphs:
     input:
-        blastp_tsv=blastp_tsv,
-    params:
-        prefix=mcl_input_prefix,
+        blastp_tsv=outdir / "blastp" / "{name}.blastp.tsv",
     output:
-        abc_file=abc_file,
+        abc_file=outdir / "mcl" / "{name}_nrm_dmls_bit.abc",
     conda:
-        "../envs/blast2graph.yaml"
+        "../envs/blast2graphs.yaml"
     log:
-        stderr=logdir / "blast2graph.stderr",
-        stdout=logdir / "blast2graph.stdout",
+        stderr=logdir / "blast2graphs" / "{name}.stderr",
+        stdout=logdir / "blast2graphs" / "{name}.stdout",
     shell:
         """
-        python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{params.prefix}"  > "{log.stdout}" 2> "{log.stderr}"
+        python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{wildcards.name}" > "{log.stdout}" 2> "{log.stderr}"
         """

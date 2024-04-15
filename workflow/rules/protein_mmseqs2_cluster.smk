@@ -2,10 +2,12 @@
 All against all protein local alignment with MMSeqs2
 """
 
+mmseqs2_db_path = outdir / "mmseqs2" / "db" / f"{run_name}"
+
 
 rule mmseqs2_createdb:
     input:
-        pep_fasta=filtered_pep_fasta,
+        pep_fasta=mmseqs2_input_fasta,
     params:
         db=mmseqs2_db_path,
     output:
