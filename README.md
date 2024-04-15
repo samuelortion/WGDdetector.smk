@@ -6,6 +6,9 @@ WGDDetector is a pipeline for whole genome duplication (WGD) detection with geno
 > [!Note] 
 > The goal of this repository is to provide an implementation that matches the results given by the published pipeline while being easier to use; and to learn more doing so.
 
+> [!Warning]
+> This repository is a WIP. It currently does not implement all WGDdetector steps.
+
 ## Install
 
 Clone this repository (use `--recurse-submodules`)
