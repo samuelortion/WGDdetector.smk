@@ -66,16 +66,13 @@ rule blast_makeblastdb_protein:
         """
 
 
-print(mcl_abc)
-
-
 rule blast2graph:
     input:
         blastp_tsv=blastp_tsv,
     params:
         prefix=mcl_input_prefix,
     output:
-        mcl_abc=mcl_abc,
+        abc_file=abc_file,
     conda:
         "../envs/blast2graph.yaml"
     log:

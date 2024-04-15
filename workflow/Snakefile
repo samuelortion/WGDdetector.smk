@@ -22,15 +22,20 @@ run_name = os.path.basename(proteome_pep)
 blastp_tsv = outdir / f"{run_name}.blastp.tsv"
 blast_db_path = outdir / "blast" / "db" / run_name
 mcl_input_prefix = outdir / "mcl" / f"{run_name}.mcl-input"
-mcl_abc = f"{mcl_input_prefix}_nrm_dmls_bit.abc"
+abc_file = f"{mcl_input_prefix}_nrm_dmls_bit.abc"
 
 filtered_pep_fasta = outdir / f"{run_name}.pep_filt.fa"
 filtered_cds_fasta = outdir / f"{run_name}.cds.filt.fa"
 genenum_seqid_mapping_table = outdir / f"{run_name}.id.table"
 
+mcl_file = outdir / "mcl" / f"{run_name}.mcl"
+orthomcl_file = outdir / "mcl" / f"{run_name}.orthomcl"  # all-protein-clustering.result
+# FIXME: It may be better to use the same naming convention as Yang et al., to not confuse the eventual user.
+
 
 include: "rules/phase_id.smk"
 include: "rules/protein_blastp_cluster.smk"
+include: "rules/mcl.smk"
 
 
 rule all:
@@ -39,4 +44,6 @@ rule all:
         filtered_cds_fasta,
         genenum_seqid_mapping_table,
         blastp_tsv,
-        mcl_abc,
+        abc_file,
+        mcl_file,
+        orthomcl_file,
