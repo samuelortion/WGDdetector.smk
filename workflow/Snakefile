@@ -14,6 +14,7 @@ configfile: "config/config.yaml"
 
 outdir = Path(config["outdir"])
 logdir = Path(config["logdir"])
+tmpdir = Path(config["tmpdir"])
 
 proteome_pep = config["input_pep"]
 proteome_cds = config["input_cds"]
@@ -32,9 +33,14 @@ mcl_file = outdir / "mcl" / f"{run_name}.mcl"
 orthomcl_file = outdir / "mcl" / f"{run_name}.orthomcl"  # all-protein-clustering.result
 # FIXME: It may be better to use the same naming convention as Yang et al., to not confuse the eventual user.
 
+mmseqs2_db_path = outdir / "mmseqs2" / "db" / f"{run_name}"
+mmseqs2_out_db_path = outdir / "mmseqs2" / "out" / f"{run_name}"
+mmseqs2_blast_tsv = outdir / "mmseqs2" / f"{run_name}.blastp.tsv"
+
 
 include: "rules/phase_id.smk"
 include: "rules/protein_blastp_cluster.smk"
+include: "rules/protein_mmseqs2_cluster.smk"
 include: "rules/mcl.smk"
 
 
@@ -47,3 +53,4 @@ rule all:
         abc_file,
         mcl_file,
         orthomcl_file,
+        mmseqs2_blast_tsv,

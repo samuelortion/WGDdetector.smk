@@ -9,6 +9,24 @@ WGDDetector is a pipeline for whole genome duplication (WGD) detection with geno
 > [!Warning]
 > This repository is a WIP. It currently does not implement all WGDdetector steps.
 
+## Workflow
+
+### Input
+
+- proteome (CDS and protein sequences in FASTA format)
+
+### Output
+
+- gene families (orthomcl format)
+
+
+### Steps
+
+1. gene families clustering
+2. large family splitting
+3. Ks hierarchical clustering
+<!-- 4. (output) -->
+
 ## Install
 
 Clone this repository (use `--recurse-submodules`)
