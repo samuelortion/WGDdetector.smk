@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-## Adapted from wgddetector phase.id.pl, Yang et al 2019.
+##  ref. phase.id.pl from WGDdetector, Yang et al. 2019
 ## 
 ## Usage example:
 ## perl phase.id.pl input.cds.fa input.pep.fa output.cds.fa output.pep.fa output.id.table
