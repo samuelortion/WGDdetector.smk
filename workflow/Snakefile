@@ -20,18 +20,13 @@ input_pep = config["input_pep"]
 input_cds = config["input_cds"]
 
 run_name = config["name"]
-print(run_name)
-
-print(outdir / "blastp" / "db" / "test.pep.filt.fa")
-
-mcl_input_prefix = outdir / "mcl" / f"{run_name}.mcl-input"
 
 filtered_pep_fasta = outdir / f"{run_name}.pep.filt.fa"
 filtered_cds_fasta = outdir / f"{run_name}.cds.filt.fa"
 genenum_seqid_mapping_table = outdir / f"{run_name}.id.table"
 
 orthomcl_file = (
-    outdir / "mcl" / f"{run_name}.pep.filt.orthomcl"
+    outdir / "mcl" / f"{run_name}.pep.filt_nrm_dmls_bit.orthomcl"
 )  # all-protein-clustering.result
 # FIXME: It may be better to use the same naming convention as Yang et al., to not confuse the eventual user.
 
@@ -41,7 +36,6 @@ mmseqs2_blast_tsv = outdir / "mmseqs2" / f"{run_name}.blastp.tsv"
 
 
 blastp_input_fasta = filtered_pep_fasta
-print(blastp_input_fasta)
 blastp_tsv = outdir / "blastp" / f"{run_name}.pep.filt.fa.blastp.tsv"
 blast_db_path = outdir / "blastp" / "db" / run_name
 
@@ -54,24 +48,14 @@ include: "rules/mcl.smk"
 
 rule all:
     input:
-        filtered_pep_fasta,
-        blastp_tsv,
-        # outdir / f"{run_name}_nrm_dmls_bit.abc"
-        # orthomcl_file,
-        # filtered_pep_fasta,
-        # filtered_cds_fasta,
-        # genenum_seqid_mapping_table,
-        # abc_file,
-        # mcl_file,
-        # orthomcl_file,
-        # mmseqs2_blast_tsv,
+        orthomcl_file,
 
 
 rule init:
     input:
         input_pep,
     output:
-        outdir / f"{run_name}",
+        outdir / f"{run_name}.pep.fa",
     shell:
         """
         cp "{input}" "{output}"

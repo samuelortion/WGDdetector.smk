@@ -4,4 +4,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - bioconda::snakemake
+  - bioconda::snakemake=8.7.0-0
+  - bioconda::mcl
+  - bioconda::blast
+  - bioconda::mmseqs2
+  - perl
+  - bioconda::perl-bioperl
+  - networkx=2.0 # for blast2graphs.py

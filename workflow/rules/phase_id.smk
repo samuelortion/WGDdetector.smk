@@ -10,14 +10,14 @@ rule filter_cds_pep_seqids:
         cds_fasta=input_cds,
         pep_fasta=input_pep,
     output:
-        cds_fasta=filtered_pep_fasta,
-        pep_fasta=filtered_cds_fasta,
-        id_table=genenum_seqid_mapping_table,
+        cds_fasta="{name}.cds.filt.fa",
+        pep_fasta="{name}.pep.filt.fa",
+        id_table="{name}.filt.id.table",
     conda:
         "../envs/bioperl.yaml"
     log:
-        stderr=logdir / "filter_cds_pep_seqids.stderr",
-        stdout=logdir / "filter_cds_pep_seqids.stdout",
+        stderr=str(logdir / "filter_cds_pep_seqids" / "{name}.stderr"),
+        stdout=str(logdir / "filter_cds_pep_seqids" / "{name}.stdout"),
     shell:
         """
         perl "workflow/scripts/phase.id.pl" "{input.cds_fasta}" "{input.pep_fasta}" "{output.cds_fasta}" "{output.pep_fasta}" "{output.id_table}" > "{log.stdout}" 2> "{log.stderr}"

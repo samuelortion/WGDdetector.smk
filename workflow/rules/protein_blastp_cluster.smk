@@ -1,22 +1,26 @@
 blast_db_path = outdir / "blastp" / "db" / f"{run_name}.pep.filt.fa"
+# print(blast_db_path)
 
 
 rule blast_blastp_all:
     input:
-        multiext(
-            str(blast_db_path),
-            ".pdb",
-            ".phr",
-            ".pin",
-            ".pjs",
-            ".pog",
-            ".pos",
-            ".pot",
-            ".psq",
-            ".ptf",
-            ".pto",
+        query=outdir / "{name}.fa",
+        db=expand(
+            "{db_path}{ext}",
+            db_path=blast_db_path,
+            ext=[
+                ".pdb",
+                ".phr",
+                ".pin",
+                # ".pjs",
+                ".pog",
+                ".pos",
+                ".pot",
+                ".psq",
+                ".ptf",
+                ".pto",
+            ]
         ),
-        query=outdir / "{name}",
     output:
         tsv=outdir / "blastp/{name}.blastp.tsv",
     params:
@@ -45,7 +49,7 @@ rule blast_makeblastdb_protein:
             ".pdb",
             ".phr",
             ".pin",
-            ".pjs",
+            # ".pjs",
             ".pog",
             ".pos",
             ".pot",
@@ -62,7 +66,7 @@ rule blast_makeblastdb_protein:
         stdout=logdir / "blast_makeblastdb_protein.stdout",
     shell:
         """
-        makeblastdb -in "{input.fasta}" -parse_seqids -dbtype prot -out "{params.db}" || exit 0  > "{log.stdout}" 2> "{log.stderr}" # makeblastdb returns ERROR even if it ran successfully on some (recent?) versions: exit 0 to avoid stopping the pipeline
+        makeblastdb -in "{input.fasta}" -parse_seqids -dbtype prot -out "{params.db}" > "{log.stdout}" 2> "{log.stderr}" # makeblastdb returns ERROR even if it ran successfully on some (recent?) versions: exit 0 to avoid stopping the pipeline
         """
 
 
@@ -71,6 +75,8 @@ rule blast2graphs:
         blastp_tsv=outdir / "blastp" / "{name}.blastp.tsv",
     output:
         abc_file=outdir / "mcl" / "{name}_nrm_dmls_bit.abc",
+    params:
+        prefix=lambda wildcards: outdir / "mcl" / wildcards.name
     conda:
         "../envs/blast2graphs.yaml"
     log:
@@ -78,5 +84,5 @@ rule blast2graphs:
         stdout=logdir / "blast2graphs" / "{name}.stdout",
     shell:
         """
-        python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{wildcards.name}" > "{log.stdout}" 2> "{log.stderr}"
+        python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{params.prefix}" > "{log.stdout}" 2> "{log.stderr}"
         """

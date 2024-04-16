@@ -2,8 +2,6 @@
 Run Markov Clustering (MCL) on an ABC file representing an homology links graph between genes
 """
 
-import os
-
 
 rule mcl_genes_abc:
     input:
@@ -13,8 +11,6 @@ rule mcl_genes_abc:
     conda:
         "../envs/mcl.yaml"
     log:
-        # stdout=lambda wildcards: logdir / "mcl_genes_abc" / f"{os.path.basename(wildcards.name)}.stdout",
-        # stderr=lambda wildcards: logdir / "mcl_genes_abc" / f"{os.path.basename(wildcards.name)}.stderr"
         stdout=logdir / "mcl_genes_abc" / "{name}.stdout",
         stderr=logdir / "mcl_genes_abc" / "{name}.stderr",
     shell:
