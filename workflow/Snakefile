@@ -44,11 +44,18 @@ include: "rules/phase_id.smk"
 include: "rules/protein_blastp_cluster.smk"
 include: "rules/protein_mmseqs2_cluster.smk"
 include: "rules/mcl.smk"
+include: "rules/ks_clustering.smk"
+include: "rules/muscle_align.smk"
 
 
 rule all:
     input:
-        orthomcl_file,
+        outdir
+        / config["folder_names"]["ks_estimate_step"]
+        / config["folder_names"]["ks_estimate_matrix_step"]
+        / "cluster1"
+        / "ks.dist.hcluster",
+        # f"{run_name}/all-protein-clustering.result",
 
 
 rule init:

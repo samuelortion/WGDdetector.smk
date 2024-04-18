@@ -1,0 +1,5 @@
+name: R
+channels:
+  - defaults
+dependencies:
+  - r-base

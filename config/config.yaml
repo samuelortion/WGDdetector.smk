@@ -8,3 +8,16 @@ input_cds: "/home/sortion/Documents/course/master/M1/internship/lamme2024/projec
 input_pep: "/home/sortion/Documents/course/master/M1/internship/lamme2024/project/others/WGDdetector/example/test.pep.fa"
 cluster_engine: "blastp"
 
+cluster_max_num: 50
+
+# Configure the output folder name to match the names of the original wgddetector
+folder_names:
+  cluster_step: "01.cluster"
+  ks_estimate_step: "02.ks_estimate"
+  ks_estimate_matrix_step: "ks_matrix"
+  hierachical_clustering_step: "03.hierarchical_clustering"
+  final_paralogs_ks_step: "04.final_paralogs_ks"
+
+file_names:
+  protein_cluster: "all-protein-clustering.result"
+  final_ks_distribution: "final.ks.distribution.list"
