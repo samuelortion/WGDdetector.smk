@@ -48,7 +48,7 @@ If you want to use conda to install Snakemake, we provide a small conda `environ
 If you do not want to use conda, you will have to install the following dependencies on your own:
 - perl >5.0, with modules Bioperl and threads
 - python
-    - [blast2graphs.py](https://github.com/trgibbons/BlastGraphMetrics/blast2graphs.py) (It is included as a git submodule, and requires networkx=2.0)
+    - [blast2graphs.py](https://github.com/trgibbons/BlastGraphMetrics/blob/master/blast2graphs.py) (It is included as a git submodule, and requires networkx=2.0)
 - R >=3.5
 - mmseqs2
 - ncbi-blast >=2.2.28
