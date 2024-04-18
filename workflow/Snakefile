@@ -7,6 +7,7 @@ ref. Yang et al 2019 https://doi.org/10.1186/s12859-019-2670-3
 """
 
 from pathlib import Path
+import sys
 
 
 configfile: "config/config.yaml"
@@ -30,19 +31,37 @@ orthomcl_file = (
 )  # all-protein-clustering.result
 # FIXME: It may be better to use the same naming convention as Yang et al., to not confuse the eventual user.
 
-mmseqs2_input_fasta = filtered_pep_fasta
-mmseqs2_out_db_path = outdir / "mmseqs2" / f"{run_name}"
-mmseqs2_blast_tsv = outdir / "mmseqs2" / f"{run_name}.blastp.tsv"
+protein_similarity_engine = config["cluster_engine"]
+available_protein_similarity_engine = ["blastp", "mmseqs2"]
+if protein_similarity_engine not in ["blastp", "mmseqs2"]:
+    raise ValueError(
+        f'`cluster_engine` "{protein_similarity_engine}" is not supported Choose one among {available_protein_similarity_engine}.'
+    )
 
+cluster_step_folder = outdir / config["folder_names"]["cluster_step"]
 
 blastp_input_fasta = filtered_pep_fasta
-blastp_tsv = outdir / "blastp" / f"{run_name}.pep.filt.fa.blastp.tsv"
-blast_db_path = outdir / "blastp" / "db" / run_name
+blastp_blast_tsv = cluster_step_folder / "blastp" / f"{run_name}.pep.filt.blastp.tsv"
+blast_db_path = cluster_step_folder / "blastp" / "db" / run_name
+
+
+mmseqs2_input_fasta = filtered_pep_fasta
+mmseqs2_db_path = cluster_step_folder / "mmseqs2" / "db" / f"{run_name}"
+mmseqs2_out_db_path = cluster_step_folder / "mmseqs2" / f"{run_name}"
+mmseqs2_blast_tsv = cluster_step_folder / "mmseqs2" / f"{run_name}.pep.filt.blastp.tsv"
+
+if protein_similarity_engine == "blastp":
+    all_vs_all_blast_tsv = blastp_blast_tsv
+elif protein_similarity_engine == "mmseqs2":
+    all_vs_all_blast_tsv = mmseqs2_blast_tsv
+
+# cluster_output_file = outdir / config["folder_names"]["cluster_step"] / config["file_names"]["protein_cluster"]
+cluster_output_file = cluster_step_folder / "mcl" / f"{run_name}.pep.filt.orthomcl"
 
 
 include: "rules/phase_id.smk"
-include: "rules/protein_blastp_cluster.smk"
-include: "rules/protein_mmseqs2_cluster.smk"
+include: "rules/protein_blastp.smk"
+include: "rules/protein_mmseqs2.smk"
 include: "rules/mcl.smk"
 include: "rules/ks_clustering.smk"
 include: "rules/muscle_align.smk"
@@ -50,20 +69,24 @@ include: "rules/muscle_align.smk"
 
 rule all:
     input:
-        outdir
-        / config["folder_names"]["ks_estimate_step"]
-        / config["folder_names"]["ks_estimate_matrix_step"]
-        / "cluster1"
-        / "ks.dist.hcluster",
-        # f"{run_name}/all-protein-clustering.result",
+        all_vs_all_blast_tsv,
+        cluster_output_file,
+        # outdir
+        # / config["folder_names"]["ks_estimate_step"]
+        # / config["folder_names"]["ks_estimate_matrix_step"]
+        # / "cluster1"
+        # / "ks.dist.hcluster",
 
 
 rule init:
     input:
-        input_pep,
+        pep=input_pep,
+        cds=input_cds,
     output:
-        outdir / f"{run_name}.pep.fa",
+        pep=outdir / f"{run_name}.pep.fa",
+        cds=outdir / f"{run_name}.cds.fa",
     shell:
         """
-        cp "{input}" "{output}"
+        cp "{input.cds}" "{output.cds}"
+        cp "{input.pep}" "{output.pep}"
         """

@@ -20,4 +20,5 @@ folder_names:
 
 file_names:
   protein_cluster: "all-protein-clustering.result"
+  blast_all_vs_all: "all-vs-all.blast"
   final_ks_distribution: "final.ks.distribution.list"
