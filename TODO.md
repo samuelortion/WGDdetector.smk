@@ -1,1 +1,2 @@
-- Enable contenairised dependencies management (Docker/Apptainer?)
+- TODO: Enable contenairised dependencies management (Docker/Apptainer?)
+- TODO: Check why mmseqs2 and blastp give different results.
