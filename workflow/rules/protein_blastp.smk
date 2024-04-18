@@ -8,21 +8,20 @@ rule blast_blastp_all:
                 ".pdb",
                 ".phr",
                 ".pin",
-                # ".pjs",
                 ".pog",
                 ".pos",
                 ".pot",
                 ".psq",
                 ".ptf",
                 ".pto",
-            ]
+            ],
         ),
     output:
         tsv=cluster_step_folder / "blastp" / "{name}.blastp.tsv",
     params:
         db=blast_db_path,
         seg="no",
-        evalue="1e10",  # FIXME: hard-coded in original WGDdetector protein_blastp_cluster.pl
+        evalue=config["minimum_homology_evalue"],
         format="7 std qlen slen",  # we need to keep both lengths
         num_threads=config["threads"],
     conda:
@@ -45,7 +44,6 @@ rule blast_makeblastdb_protein:
             ".pdb",
             ".phr",
             ".pin",
-            # ".pjs",
             ".pog",
             ".pos",
             ".pot",
@@ -64,5 +62,3 @@ rule blast_makeblastdb_protein:
         """
         makeblastdb -in "{input.fasta}" -parse_seqids -dbtype prot -out "{params.db}" > "{log.stdout}" 2> "{log.stderr}" # makeblastdb returns ERROR even if it ran successfully on some (recent?) versions: exit 0 to avoid stopping the pipeline
         """
-
-
