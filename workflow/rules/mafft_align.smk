@@ -1,0 +1,3 @@
+"""
+MAFFT multiple sequence alignement
+"""

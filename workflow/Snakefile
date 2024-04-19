@@ -69,11 +69,7 @@ include: "rules/cds_muscle.smk"
 
 rule all:
     input:
-        all_vs_all_blast_tsv,
-        cluster_output_file,
-        "results/02.ks_estimate/align/cluster1.input.cds.file.align",
-        "results/02.ks_estimate/align/cluster1.input.cds.file.output.ks.gz",
-        "results/02.ks_estimate/ks_matrix/cluster1/ks.dist",
+        "results/02.ks_estimate/ks_matrix/cluster1/ks.dist.hcluster",
 
 
 rule init:

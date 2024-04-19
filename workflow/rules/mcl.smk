@@ -38,7 +38,7 @@ rule mcl_genes_abc:
         """
 
 
-rule mcl_output_to_orthomcl:
+rule mcl_to_orthomcl:
     input:
         mcl="{name}.mcl",
     output:
