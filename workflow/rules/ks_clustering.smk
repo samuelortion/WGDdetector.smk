@@ -10,7 +10,7 @@ Steps:
 
 ks_estimate_step_folder = outdir / config["folder_names"]["ks_estimate_step"]
 ks_estimate_matrix_folder = (
-    outdir / ks_estimate_step_folder / config["folder_names"]["ks_estimate_matrix_step"]
+    ks_estimate_step_folder / config["folder_names"]["ks_estimate_matrix_step"]
 )
 ks_cluster_step_folder = outdir / config["folder_names"]["hierarchical_clustering_step"]
 
@@ -67,13 +67,6 @@ rule calculate_ks:
         """
 
 
-# print(ks_estimate_matrix_folder / "{cluster}" / "ks.dist")
-# print(ks_estimate_step_folder
-#         / "align"
-#         / "{cluster}.input.cds.file.output.ks.gz",)
-# print(ks_estimate_matrix_folder / "align" / "{cluster}.input.cds.file.output.ks.gz",)
-
-
 rule ks_dist:
     input:
         ks_list=ks_estimate_step_folder
@@ -81,9 +74,12 @@ rule ks_dist:
         / "{cluster}.input.cds.file.output.ks.gz",
     output:
         ks_dist=ks_estimate_matrix_folder / "{cluster}" / "ks.dist",
+    params:
+        folder=lambda wildcards: ks_estimate_matrix_folder / wildcards.cluster,
     shell:
         """
-        perl "workflow/scripts/wgddetector/collect_ks.pl" "{input.ks_list}" "{output.ks_dist}"
+        mkdir -p "{params.folder}"
+        perl "workflow/scripts/wgddetector/collect_ks.pl" "{output.ks_dist}" "{input.ks_list}"
         """
 
 

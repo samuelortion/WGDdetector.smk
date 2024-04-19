@@ -1,6 +1,7 @@
+#!/usr/bin/env perl
+# ref. calculate_ks.pl and calculate_ks.single.pl from WGDdetector, Yang et al. 2019
 # Compute Ks metrics
 # A merge of the original WGDdetector calculate_ks.pl and calculate_ks.single.pl in a single Perl script
-
 
 # use strict;
 use warnings;
