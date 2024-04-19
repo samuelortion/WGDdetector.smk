@@ -64,18 +64,15 @@ include: "rules/protein_blastp.smk"
 include: "rules/protein_mmseqs2.smk"
 include: "rules/mcl.smk"
 include: "rules/ks_clustering.smk"
-include: "rules/muscle_align.smk"
+include: "rules/cds_muscle.smk"
 
 
 rule all:
     input:
         all_vs_all_blast_tsv,
         cluster_output_file,
-        # outdir
-        # / config["folder_names"]["ks_estimate_step"]
-        # / config["folder_names"]["ks_estimate_matrix_step"]
-        # / "cluster1"
-        # / "ks.dist.hcluster",
+        "results/02.ks_estimate/align/cluster1.input.cds.file.align",
+        # "results/results/02.ks_estimate/ks_matrix/cluster1/ks.dist"
 
 
 rule init:

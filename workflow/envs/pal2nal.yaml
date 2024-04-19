@@ -1,0 +1,5 @@
+name: pal2nal
+channels:
+  - bioconda
+dependencies:
+  - bioconda::pal2nal
