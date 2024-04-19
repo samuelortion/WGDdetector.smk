@@ -60,16 +60,16 @@ cluster_output_file = cluster_step_folder / "mcl" / f"{run_name}.pep.filt.orthom
 
 
 include: "rules/phase_id.smk"
-include: "rules/protein_blastp.smk"
-include: "rules/protein_mmseqs2.smk"
+include: "rules/blastp.smk"
+include: "rules/mmseqs2.smk"
 include: "rules/mcl.smk"
+include: "rules/muscle.smk"
 include: "rules/ks_clustering.smk"
-include: "rules/cds_muscle.smk"
 
 
 rule all:
     input:
-        "results/02.ks_estimate/ks_matrix/cluster1/ks.dist.hcluster",
+        outdir / "02.ks_estimate/ks_matrix/cluster1/ks.dist.hcluster",
 
 
 rule init:

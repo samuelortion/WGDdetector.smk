@@ -25,7 +25,7 @@ WGDDetector is a pipeline for whole genome duplication (WGD) detection with geno
 
 1. gene similarity search on proteome (BLASTp or MMSeqS2)
 2. gene families identification: protein-protein homology graph clustering (MCL)
-3. pairwise alignement on CDS (MAFFT and PAL2NAL)
+3. pairwise alignement on CDS (MUSCLE and PAL2NAL)
 4. computation of dS
 5. identification of sub gene families based on dS (hierarchical clustering with R)
 6. sub gene families phasing
