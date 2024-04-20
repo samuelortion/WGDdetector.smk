@@ -11,6 +11,10 @@ cluster_engine: "mmseqs2"
 cluster_max_num: 50
 minimum_homology_evalue: 1e-10
 
+# Tool parameters
+blastp:
+  seg: no
+
 # Configure the output folder name to match the names of the original wgddetector
 folder_names:
   cluster_step: "01.cluster"

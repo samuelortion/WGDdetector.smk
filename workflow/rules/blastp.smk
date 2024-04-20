@@ -1,4 +1,4 @@
-rule blast_blastp_all:
+rule blastp_all:
     input:
         query=outdir / "{name}.fa",
         db=expand(
@@ -20,10 +20,10 @@ rule blast_blastp_all:
         tsv=cluster_step_folder / "blastp" / "{name}.blastp.tsv",
     params:
         db=blast_db_path,
-        seg="no",
+        seg=config["blastp"]["seg"],
         evalue=config["minimum_homology_evalue"],
         format="7 std qlen slen",  # we need to keep both lengths
-        num_threads=config["threads"],
+    threads: config["threads"]
     conda:
         "../envs/blast.yaml"
     log:
@@ -31,11 +31,11 @@ rule blast_blastp_all:
         stdout=logdir / "blast_blastp_all" / "{name}.stderr",
     shell:
         """
-        blastp -query "{input.query}" -db "{params.db}" -seg "{params.seg}" -evalue "{params.evalue}" -out "{output.tsv}" -outfmt "{params.format}" -num_threads "{params.num_threads}"  > "{log.stdout}" 2> "{log.stderr}"
+        blastp -query "{input.query}" -db "{params.db}" -seg "{params.seg}" -evalue "{params.evalue}" -out "{output.tsv}" -outfmt "{params.format}" -num_threads "{threads}"  > "{log.stdout}" 2> "{log.stderr}"
         """
 
 
-rule blast_makeblastdb_protein:
+rule makeblastdb_protein:
     input:
         fasta=blastp_input_fasta,
     output:

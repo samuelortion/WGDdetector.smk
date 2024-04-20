@@ -7,7 +7,7 @@ rule blast2graphs:
     input:
         blastp_tsv=cluster_step_folder / protein_similarity_engine / "{name}.blastp.tsv",
     output:
-        abc_file=cluster_step_folder / "mcl" / "{name}.abc",
+        abc=cluster_step_folder / "mcl" / "{name}.abc",
     params:
         prefix=lambda wildcards: cluster_step_folder / "mcl" / wildcards.name,
     conda:
@@ -18,7 +18,7 @@ rule blast2graphs:
     shell:
         """
         python3 "workflow/lib/BlastGraphMetrics/blast2graphs.py" "{input.blastp_tsv}" "{params.prefix}" > "{log.stdout}" 2> "{log.stderr}"
-        mv "{params.prefix}_nrm_dmls_bit.abc" "{output.abc_file}"
+        mv "{params.prefix}_nrm_dmls_bit.abc" "{output.abc}"
         """
 
 
@@ -31,7 +31,7 @@ rule mcl_genes_abc:
         "../envs/mcl.yaml"
     log:
         stdout=logdir / "mcl_genes_abc" / "{name}.stdout",
-        stderr=logdir / "mcl_genes_abc" / "{name}.stderr",
+        stderr=logdir / "mcl_genes_abc" / "{name}.stderr",  # TODO We could add a thread parameter to speed up mcl.
     shell:
         """
         mcl "{input.abc}" --abc -I 1.5 -o "{output.mcl}" > "{log.stdout}" 2> "{log.stderr}"

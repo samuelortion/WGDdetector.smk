@@ -47,7 +47,7 @@ rule mmseqs2_search:
         db=mmseqs2_db_path,
         out_db=mmseqs2_out_db_path,
         tmp_dir=tmpdir,
-        threads=config["threads"],
+    threads: config["threads"]
     output:
         out_db_files=multiext(str(mmseqs2_out_db_path), "", ".dbtype", ".index"),
     conda:
@@ -57,7 +57,7 @@ rule mmseqs2_search:
         stdout=logdir / "mmseqs2_search.stdout",
     shell:
         """
-        mmseqs search "{params.db}" "{params.db}" "{params.out_db}" "{params.tmp_dir}" --search-type 2 --threads "{params.threads}" > "{log.stdout}" 2> "{log.stderr}"
+        mmseqs search "{params.db}" "{params.db}" "{params.out_db}" "{params.tmp_dir}" --search-type 2 --threads "{threads}" > "{log.stdout}" 2> "{log.stderr}"
         """
 
 
@@ -77,7 +77,7 @@ rule mmseqs2_convertalis:
     params:
         db=mmseqs2_db_path,
         out_db=mmseqs2_out_db_path,
-        threads=config["threads"],
+    threads: config["threads"]
     output:
         blast_tsv=mmseqs2_blast_tsv,
     conda:
@@ -87,5 +87,5 @@ rule mmseqs2_convertalis:
         stdout=logdir / "mmseqs2_convertalis.stdout",
     shell:
         """
-        mmseqs convertalis "{params.db}" "{params.db}" "{params.out_db}" "{output.blast_tsv}" --format-mode 2 --threads "{params.threads}" > "{log.stdout}" 2> "{log.stderr}"
+        mmseqs convertalis "{params.db}" "{params.db}" "{params.out_db}" "{output.blast_tsv}" --format-mode 2 --threads "{threads}" > "{log.stdout}" 2> "{log.stderr}"
         """

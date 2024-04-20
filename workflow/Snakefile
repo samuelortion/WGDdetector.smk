@@ -1,5 +1,5 @@
 """
-WGDdetector
+WGDdetector.smk: port of WGDdetector on Snakemake
 
 a pipeline for whole genome duplication (WGD) detecting with the genome or transcriptome annotations
 
@@ -35,7 +35,8 @@ protein_similarity_engine = config["cluster_engine"]
 available_protein_similarity_engine = ["blastp", "mmseqs2"]
 if protein_similarity_engine not in ["blastp", "mmseqs2"]:
     raise ValueError(
-        f'`cluster_engine` "{protein_similarity_engine}" is not supported Choose one among {available_protein_similarity_engine}.'
+        f'`cluster_engine` "{protein_similarity_engine}" is not supported. \
+        Choose one among {available_protein_similarity_engine}.'
     )
 
 cluster_step_folder = outdir / config["folder_names"]["cluster_step"]

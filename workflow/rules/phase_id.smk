@@ -1,7 +1,7 @@
 """
 ref. phase.id.pl
 
-Filter the CDS FASTA file to keep only sequences that appear in the protein FASTA file
+Filter the CDS and protein FASTA files to keep only sequences of genes that appear in both files
 """
 
 

@@ -5,7 +5,6 @@ Steps:
 - Split 
 - Calculate Ks using Bioperl
 - Cluster genes based on Ks
-
 """
 
 ks_estimate_step_folder = outdir / config["folder_names"]["ks_estimate_step"]
