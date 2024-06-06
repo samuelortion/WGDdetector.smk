@@ -49,7 +49,7 @@ rule mmseqs2_search:
         tmp_dir=tmpdir,
     threads: config["threads"]
     output:
-        out_db_files=multiext(str(mmseqs2_out_db_path), "", ".dbtype", ".index"),
+        out_db_files=multiext(str(mmseqs2_out_db_path), ".dbtype", ".index"),
     conda:
         "../envs/mmseqs2.yaml"
     log:

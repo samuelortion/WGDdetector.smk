@@ -1,5 +1,5 @@
 # WGDdetector.smk
-Snakemake port of [WGDdetector](https://github.com/yongzhiyang2012/WGDdetector) pipeline, by Yang _et al._ 2019
+Snakemake port of [WGDdetector](https://github.com/yongzhiyang2012/WGDdetector) pipeline, (Yang _et al._ 2019).
 
 WGDDetector is a pipeline for whole genome duplication (WGD) detection with genome or transcriptome annotations.
 

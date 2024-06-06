@@ -6,4 +6,4 @@ dag:
 	dot -O tmp/dag.dot -T png
 
 time:
-	time snakemake --cores 1 --snakefile ./workflow/Snakefile --use-conda --config outdir=tmp/results
+	time snakemake --cores 1 --snakefile ./workflow/Snakefile --use-conda --config outdir=tmp/result
